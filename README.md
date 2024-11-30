@@ -1,2 +1,41 @@
-# LSTM---Stock
-An LSTM model for predicting the upward trend of the stock market
+# 拟研究股票走向与股民评论之间的关系10.8
+- 一个月左右时间某某只股票的价格变化
+- 一些评论网（股吧）站下股民对该股票的看
+初步预算是做时间序列分析 通过nlp对评论进行评分（评价上升指标以及下降指标），再与股价的变化进行对比
+10.15
+## 可能需要解决
+- 目前评论网站做的都很烂，很难爬到有用的数据
+    - 在之前就已经试过用八爪鱼爬取数据，结果很差（10.11）
+- 模型取舍待定
+    - 随机森林/LSTM
+- nlp分析需要一个金融词库对样本进行评价
+    - csdn上找到的解决方法是snownlp库，待定
+- 对评论数据进行特征提取比较困难
+    - 先把评论爬取出来，接着处理到只有评论内容和时间，其实特征工程也就那样
+- 做出来的结果相关性很差
+    - 无解，那说明股民无法影响股市
+## 确定步骤
+1. 进行爬取（传统爬取）
+    - 考虑是否采用数据库方式
+    - 是否需要进行传统分词
+2. 计算情绪系数（不采用二分类，怕权重过大影响模型）
+3. 获取股票历史价格（tushare）
+4. 进行相关性分析（互信息法）
+   - 根据别人的经验大概率会有误差，原因是数据中带有噪音，可进行平滑处理（修改权重）
+5. 结合模型进行预测训练
+   - 有一个关键的点是时间预测是明天的股市
+
+股市数据df_money,评论数据grouped_df 原始数据ez.csv 评论情绪系数ez_full.csv comments_with_sentiment_score.csv,区别是采用的词库
+txt后缀为词库 py后缀为爬虫代码（非本项目采用的采集数据方法）
+
+ts_code	str	Y	股票代码
+trade_date	str	Y	交易日期
+open	float	Y	开盘价
+high	float	Y	最高价
+low	float	Y	最低价
+close	float	Y	收盘价
+pre_close	float	Y	昨收价
+change	float	Y	涨跌额
+pct_chg	float	Y	涨跌幅(%)
+vol	float	Y	成交量(股)
+amount	float	Y	成交额(元)
